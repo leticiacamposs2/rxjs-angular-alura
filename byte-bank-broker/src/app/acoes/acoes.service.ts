@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { map, pluck, tap } from 'rxjs/operators';
 import { Acao, Acoes, AcoesAPI } from './modelo/acoes';
 
@@ -9,9 +9,10 @@ import { Acao, Acoes, AcoesAPI } from './modelo/acoes';
 export class AcoesService {
   constructor(private httpClient: HttpClient) { }
 
-  getAcoes() {
+  getAcoes(value?: string) {
+    const params = value ? new HttpParams().append('valor', value) : undefined;
     return this.httpClient
-      .get<AcoesAPI>('http://localhost:3000/acoes')
+      .get<AcoesAPI>('http://localhost:3000/acoes', { params })
       .pipe(
         tap((valor) => console.log(valor)),
         pluck('payload'),
